@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt</title>
+    <style>
+        /* Add some basic styling to the body */
+        body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          background-color: #f2f2f2;
+        }
+  
+        /* Style the form */
+        form {
+          margin: 50px auto;
+          width: 500px;
+          padding: 30px;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px #ccc;
+        }
+  
+        /* Style the form elements */
+        label, input[type="text"], input[type="file"] {
+          display: block;
+          margin-bottom: 20px;
+          width: 100%;
+        }
+  
+        label {
+          font-size: 18px;
+          color: #555;
+        }
+  
+        input[type="text"], input[type="file"] {
+          padding: 12px;
+          font-size: 16px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+  
+        /* Style the button */
+        button {
+          background-color: #4CAF50;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+        }
+  
+        /* Add some hover effect to the button */
+        button:hover {
+          background-color: #3e8e41;
+        }
+    @media (max-width: 600px) {
+    /* Reduce the size of the form */
+        form {
+        width: 90%;
+        margin: 20px auto;
+        }
+        /* Reduce the size of the labels and inputs */
+        label, input[type="text"], input[type="file"] {
+        font-size: 14px;
+        }
+        /* Center the button and reduce its size */
+        button {
+        width: 80%;
+        margin: 20px auto;
+        font-size: 14px;
+        }
+  }
+      </style>
+</head>
+<body>
+    <form>
+        <label for="inputEncryptedImage">Select Encrypted Image:</label>
+        <input type="file" id="inputEncryptedImage" name="inputEncryptedImage">
+        <br>
+        <label for="inputKey">Decryption Key:</label>
+        <input type="text" id="inputKey" name="inputKey">
+        <br><br>
+        <input type="button" value="Decrypt and Download" onclick="decryptImage()">
+      </form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script>
+  function decryptImage() {
+    var inputEncryptedImage = document.getElementById("inputEncryptedImage");
+    var file = inputEncryptedImage.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var key = document.getElementById("inputKey").value;
+      var bytes = CryptoJS.AES.decrypt(e.target.result, key);
+      var decryptedImage = bytes.toString(CryptoJS.enc.Utf8);
+      // create a download link
+      var link = document.createElement("a");
+      link.download = "decrypted_"+file.name;
+      link.href = decryptedImage;
+      link.click();
+    }
+    reader.readAsText(file);
+  }
+</script>
+</html>

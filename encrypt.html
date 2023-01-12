@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Add some basic styling to the body */
+        body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          background-color: #f2f2f2;
+        }
+  
+        /* Style the form */
+        form {
+          margin: 50px auto;
+          width: 500px;
+          padding: 30px;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px #ccc;
+        }
+  
+        /* Style the form elements */
+        label, input[type="text"], input[type="file"] {
+          display: block;
+          margin-bottom: 20px;
+          width: 100%;
+        }
+  
+        label {
+          font-size: 18px;
+          color: #555;
+        }
+  
+        input[type="text"], input[type="file"] {
+          padding: 12px;
+          font-size: 16px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+  
+        /* Style the button */
+        button {
+          background-color: #4CAF50;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+        }
+  
+        /* Add some hover effect to the button */
+        button:hover {
+          background-color: #3e8e41;
+        }
+      </style>
+</head>
+<body>
+    <form>
+        <label for="inputImage">Select Image:</label>
+        <input type="file" id="inputImage" name="inputImage">
+        <br>
+        <label for="inputKey">Encryption Key:</label>
+        <input type="text" id="inputKey" name="inputKey">
+        <br><br>
+        <input type="button" value="Encrypt & Download" onclick="encryptImage()">
+    </form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script>
+    function encryptImage() {
+      var inputImage = document.getElementById("inputImage");
+      var file = inputImage.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var key = document.getElementById("inputKey").value;
+        var cipher = CryptoJS.AES.encrypt(e.target.result, key);
+        var encryptedImage = cipher.toString();
+        // create a download link
+        var link = document.createElement("a");
+        link.download = "encrypted_"+file.name;
+        link.href = "data:application/octet-stream," + encryptedImage;
+        link.click();
+      }
+      reader.readAsDataURL(file);
+    }
+  </script>
+</html>
